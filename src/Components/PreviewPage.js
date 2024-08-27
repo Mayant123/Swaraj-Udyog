@@ -8,7 +8,8 @@ const PreviewPage = () => {
         idType: 'aadhar',
         idNumber: '241535416',
         vehicleNumber: 'DL3125245LA65',
-        location: 'Jhajjar', // Added location field
+        location: 'Jhajjar',
+        companyName: 'Swaraj Udyog', // Added company name field
         orders: [
             { soNumber: '1235425234626', soDate: '16.08.24', quantity: '100 Pcs' },
             { soNumber: '9876543210123', soDate: '17.08.24', quantity: '50 Pcs' }
@@ -65,7 +66,7 @@ const PreviewPage = () => {
                     <div className='md:mx-[10px]'>
                         <div className='flex justify-end'>
                             <div className='flex-col'>
-                                <p className='text-[1.75rem] font-bold'>Swaraj Udyog</p>
+                                <p className='text-[1.75rem] font-bold'>{editableData.companyName}</p> {/* Display the company name dynamically */}
                                 <p>Shop No.4,5,6 Bank Building</p>
                                 <p>Kshatriya Nagar, Dhampur</p>
                                 <p>Distt. Bijnore (U.P.)</p>
@@ -194,30 +195,67 @@ const PreviewPage = () => {
                                             onChange={handleInputChange}
                                         />
                                     </p>
+                                    <div className="mt-4">
+                                        <p>Select Company:</p>
+                                        <label className="inline-flex items-center">
+                                            <input
+                                                type="radio"
+                                                name="companyName"
+                                                value="Shree Ji"
+                                                checked={editableData.companyName === 'Shree Ji'}
+                                                onChange={handleInputChange}
+                                                className="form-radio"
+                                            />
+                                            <span className="ml-2">Shree Ji</span>
+                                        </label>
+                                        <label className="inline-flex items-center ml-4">
+                                            <input
+                                                type="radio"
+                                                name="companyName"
+                                                value="Northern Impex"
+                                                checked={editableData.companyName === 'Northern Impex'}
+                                                onChange={handleInputChange}
+                                                className="form-radio"
+                                            />
+                                            <span className="ml-2">Northern Impex</span>
+                                        </label>
+                                        <label className="inline-flex items-center ml-4">
+                                            <input
+                                                type="radio"
+                                                name="companyName"
+                                                value="Swaraj Udyog"
+                                                checked={editableData.companyName === 'Swaraj Udyog'}
+                                                onChange={handleInputChange}
+                                                className="form-radio"
+                                            />
+                                            <span className="ml-2">Swaraj Udyog</span>
+                                        </label>
+                                    </div>
                                 </>
                             ) : (
                                 <>
-                                    <p>Date: {editableData.date}</p>
+                                    <p>Date: <span className="font-bold">{editableData.date}</span></p>
                                     <p className='mt-8'>To,</p>
                                     <p>Supply Chain Team</p>
                                     <p>Xiaomi Technology India Pvt. Ltd.</p>
-                                    <p>{editableData.location}</p> {/* Display location in preview mode */}
+                                    <p>{editableData.location}</p>
                                     <p className='mt-8'>Reg: Authorization Letter for self Pick-up</p>
                                     <p className='mt-4'>Sir,</p>
                                     <p className='mt-2'>Request you to kindly allow self-pickup for below purchase orders:</p>
                                     {editableData.orders.map((order, index) => (
                                         <div key={index} className='mt-2'>
-                                            <p>So No. {order.soNumber} Dated {order.soDate} Qty- {order.quantity}</p>
+                                            <p>So No. <span className="font-bold">{order.soNumber}</span> Dated <span className="font bold">{order.soDate}</span> <span className="fontbold">Qty- <span className="font-bold">{order.quantity}</span></span></p>
                                         </div>
                                     ))}
-                                    <p className='mt-6'>To my representative {editableData.representativeName} having {editableData.idType === 'aadhar' ? 'Aadhar No.' : 'PAN No.'} {editableData.idNumber}</p>
-                                    <p className='mt-2'>Also I would like to request you to kindly generate E-Way bill with vehicle no. {editableData.vehicleNumber}</p>
+                                    <p className='mt-6'>To my representative <span className='font-bold'>{editableData.representativeName}</span> having <span className='font-bold'>{editableData.idType === 'aadhar' ? 'Aadhar No.' : 'PAN No.'}</span><span className='font-bold'>{editableData.idNumber}</span></p>
+                                    <p className='mt-2'>Also I would like to request you to kindly generate E-Way bill with vehicle no. <span className="font-bold">{editableData.vehicleNumber}</span></p>
+                                    {/* <p className='mt-4'>Company: {editableData.companyName}</p> Display selected company */}
                                 </>
                             )}
 
                             <p className='mt-8'>Regards,</p>
                             <p className='mt-20'>Bhawna Maheshwari</p>
-                            <p>Swaraj Udyog</p>
+                            <p>{editableData.companyName}</p> {/* Reflect selected company */}
                             <p>Dhampur</p>
                         </div>
                     </div>

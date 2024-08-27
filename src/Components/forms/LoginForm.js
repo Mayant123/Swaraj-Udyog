@@ -1,32 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
-
     const navigate = useNavigate();
-    // Consolidate the form fields into a single state object
+
+    // Hardcoded allowed email, password, and company pairs for now
+    const allowedUsers = {
+        'shreeji@gmail.com': { password: 'shreeji123', company: 'Shree Ji' },
+        'northernimpex@gmail.com': { password: 'northern123', company: 'Northern Impex' },
+        'swarajudyog@gmail.com': { password: 'swaraj123', company: 'Swaraj Udyog' },
+    };
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
         rememberMe: false,
     });
 
-    useEffect(()=>{
-        const auth=localStorage.getItem('user');
-        if(auth){
-            navigate("/");
-        }
-    },[])
-
     const [errors, setErrors] = useState({ email: '', password: '' });
 
-    // Function to validate email
+    useEffect(() => {
+        const auth = localStorage.getItem('user');
+        if (auth) {
+            navigate("/");
+        }
+    }, []);
+
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
 
-    // Form submission handler
     const handleSubmit = (e) => {
         e.preventDefault();
         let validationErrors = {};
@@ -36,21 +40,28 @@ const LoginForm = () => {
             validationErrors.email = 'Email is required';
         } else if (!validateEmail(formData.email)) {
             validationErrors.email = 'Enter a valid email';
+        } else if (!allowedUsers.hasOwnProperty(formData.email)) {
+            validationErrors.email = 'Access denied: Email is not allowed';
         }
 
         // Validate password
         if (!formData.password) {
             validationErrors.password = 'Password is required';
-        } else if (formData.password.length < 6) {
-            validationErrors.password = 'Password must be at least 6 characters long';
+        } else if (allowedUsers[formData.email].password !== formData.password) {
+            validationErrors.password = 'Invalid email or password';
         }
 
         // Check if there are any validation errors
         if (Object.keys(validationErrors).length === 0) {
-            console.log('Form submitted successfully with data:', formData);
-            localStorage.setItem("user", JSON.stringify(formData));
-            navigate("/")
-            // Reset the form after successful submission
+            // Store the user's info, including company, in localStorage
+            const userData = {
+                email: formData.email,
+                company: allowedUsers[formData.email].company
+            };
+            localStorage.setItem("user", JSON.stringify(userData));
+            console.log('Form submitted successfully with data:', userData);
+            navigate("/");
+            // Reset form after successful submission
             setFormData({
                 email: '',
                 password: '',
@@ -62,7 +73,6 @@ const LoginForm = () => {
         }
     };
 
-    // General change handler for form inputs
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData((prevData) => ({
