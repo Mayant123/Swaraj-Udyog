@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import html2pdf from 'html2pdf.js';
+import stamp from "../../src/assets/stamp_sign.png"
 
 const PreviewPage = () => {
     const [editableData, setEditableData] = useState({
@@ -254,6 +255,9 @@ const PreviewPage = () => {
                             )}
 
                             <p className='mt-8'>Regards,</p>
+                            <div className='relative h-auto w-auto mt-2'>
+                                <img src={stamp} alt="No Image found" className='absolute h-auto w-[9rem] ms-[-25px]' />
+                            </div>
                             <p className='mt-20'>Bhawna Maheshwari</p>
                             <p>{editableData.companyName}</p> {/* Reflect selected company */}
                             <p>Dhampur</p>
