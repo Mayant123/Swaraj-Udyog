@@ -9,6 +9,10 @@ import PrivateCompoenent from './Components/PrivateComponents';
 import AdminManagement from './Components/AdminManagement';
 
 function App() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const loggedInEmail= user.email;
+  console.log(loggedInEmail);
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -18,7 +22,7 @@ function App() {
         <Routes>
           <Route element={<PrivateCompoenent/>}>
             <Route path="/" element={<Home />} />
-            <Route path='/preview' element={<PreviewPage />} />
+            <Route path='/preview' element={<PreviewPage loggedInEmail={loggedInEmail}/>} />
           </Route>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/admin-management" element={<AdminManagement />} />

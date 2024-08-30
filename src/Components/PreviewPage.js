@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import html2pdf from 'html2pdf.js';
 import stamp from "../../src/assets/stamp_sign.png"
 
-const PreviewPage = () => {
+const PreviewPage = ({ loggedInEmail }) => {
+    const companyByEmail = {
+        "shreeji@example.com": "Shree Ji",
+        "northernimpex@example.com": "Northern Impex",
+        "swarajudyog@example.com": "Swaraj Udyog"
+    };
+
+    const defaultCompany = companyByEmail[loggedInEmail] || 'Swaraj Udyog';
+
     const [editableData, setEditableData] = useState({
         date: '16.08.24',
         representativeName: 'Mr. Satyal',
@@ -10,36 +18,27 @@ const PreviewPage = () => {
         idNumber: '241535416',
         vehicleNumber: 'DL3125245LA65',
         location: 'Jhajjar',
-        companyName: 'Swaraj Udyog', // Added company name field
-        orders: [
-            { soNumber: '1235425234626', soDate: '16.08.24', quantity: '100 Pcs' },
-            { soNumber: '9876543210123', soDate: '17.08.24', quantity: '50 Pcs' }
-        ]
+        companyName: defaultCompany,
+        order: { soNumber: '1235425234626', soDate: '2024-08-16', quantity: '100 Pcs' }
     });
 
     const [isPreviewMode, setIsPreviewMode] = useState(false);
+
+    useEffect(() => {
+        setEditableData(prevData => ({
+            ...prevData,
+            companyName: defaultCompany
+        }));
+    }, [loggedInEmail]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setEditableData({ ...editableData, [name]: value });
     };
 
-    const handleOrderInputChange = (index, e) => {
+    const handleOrderInputChange = (e) => {
         const { name, value } = e.target;
-        const updatedOrders = editableData.orders.map((order, i) => (
-            i === index ? { ...order, [name]: value } : order
-        ));
-        setEditableData({ ...editableData, orders: updatedOrders });
-    };
-
-    const addOrder = () => {
-        const newOrder = { soNumber: '', soDate: '', quantity: '' };
-        setEditableData({ ...editableData, orders: [...editableData.orders, newOrder] });
-    };
-
-    const removeOrder = (index) => {
-        const updatedOrders = editableData.orders.filter((_, i) => i !== index);
-        setEditableData({ ...editableData, orders: updatedOrders });
+        setEditableData({ ...editableData, order: { ...editableData.order, [name]: value } });
     };
 
     const togglePreviewMode = () => {
@@ -50,7 +49,7 @@ const PreviewPage = () => {
         const element = document.getElementById('pdf-content'); // Capture the preview content
         const opt = {
             margin: 0.5,
-            filename: 'Authorization_Letter.pdf',
+            filename: `Sno.${editableData.order.soNumber}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -104,48 +103,34 @@ const PreviewPage = () => {
                                     <p className='mt-8'>Reg: Authorization Letter for self Pick-up</p>
                                     <p className='mt-4'>Sir,</p>
                                     <p className='mt-2'>Request you to kindly allow self-pickup for below purchase orders:</p>
-                                    {editableData.orders.map((order, index) => (
-                                        <div key={index} className='mt-2'>
-                                            <p>
-                                                So No.
-                                                <input
-                                                    className="ml-2 border-b border-gray-300 focus:outline-none"
-                                                    type="text"
-                                                    name="soNumber"
-                                                    value={order.soNumber}
-                                                    onChange={(e) => handleOrderInputChange(index, e)}
-                                                />
-                                                Dated
-                                                <input
-                                                    className="ml-2 border-b border-gray-300 focus:outline-none"
-                                                    type="date"
-                                                    name="soDate"
-                                                    value={order.soDate}
-                                                    onChange={(e) => handleOrderInputChange(index, e)}
-                                                />
-                                                Qty
-                                                <input
-                                                    className="ml-2 border-b border-gray-300 focus:outline-none"
-                                                    type="text"
-                                                    name="quantity"
-                                                    value={order.quantity}
-                                                    onChange={(e) => handleOrderInputChange(index, e)}
-                                                />
-                                            </p>
-                                            <button
-                                                className="text-red-500 mt-2 text-sm"
-                                                onClick={() => removeOrder(index)}
-                                            >
-                                                Remove Order
-                                            </button>
-                                        </div>
-                                    ))}
-                                    <button
-                                        className="mt-4 px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white"
-                                        onClick={addOrder}
-                                    >
-                                        Add Order
-                                    </button>
+                                    <div className='mt-2'>
+                                        <p>
+                                            So No.
+                                            <input
+                                                className="ml-2 border-b border-gray-300 focus:outline-none"
+                                                type="text"
+                                                name="soNumber"
+                                                value={editableData.order.soNumber}
+                                                onChange={handleOrderInputChange}
+                                            />
+                                            Dated
+                                            <input
+                                                className="ml-2 border-b border-gray-300 focus:outline-none"
+                                                type="date"
+                                                name="soDate"
+                                                value={editableData.order.soDate}
+                                                onChange={handleOrderInputChange}
+                                            />
+                                            Qty
+                                            <input
+                                                className="ml-2 border-b border-gray-300 focus:outline-none"
+                                                type="text"
+                                                name="quantity"
+                                                value={editableData.order.quantity}
+                                                onChange={handleOrderInputChange}
+                                            />
+                                        </p>
+                                    </div>
                                     <p className='mt-6'>
                                         To my representative
                                         <input
@@ -243,11 +228,11 @@ const PreviewPage = () => {
                                     <p className='mt-8'>Reg: Authorization Letter for self Pick-up</p>
                                     <p className='mt-4'>Sir,</p>
                                     <p className='mt-2'>Request you to kindly allow self-pickup for below purchase orders:</p>
-                                    {editableData.orders.map((order, index) => (
-                                        <div key={index} className='mt-2'>
-                                            <p>So No. <span className="font-bold">{order.soNumber}</span> Dated <span className="font bold">{order.soDate}</span> <span className="fontbold">Qty- <span className="font-bold">{order.quantity}</span></span></p>
-                                        </div>
-                                    ))}
+                                    <div className='mt-2'>
+                                        <p>
+                                            So No. <span className="font-bold">{editableData.order.soNumber}</span> Dated <span className="font-bold">{editableData.order.soDate}</span> Qty <span className="font-bold">{editableData.order.quantity}</span>
+                                        </p>
+                                    </div>
                                     <p className='mt-6'>To my representative <span className='font-bold'>{editableData.representativeName}</span> having <span className='font-bold'>{editableData.idType === 'aadhar' ? 'Aadhar No.' : 'PAN No.'}</span><span className='font-bold'>{editableData.idNumber}</span></p>
                                     <p className='mt-2'>Also I would like to request you to kindly generate E-Way bill with vehicle no. <span className="font-bold">{editableData.vehicleNumber}</span></p>
                                     {/* <p className='mt-4'>Company: {editableData.companyName}</p> Display selected company */}
@@ -258,7 +243,7 @@ const PreviewPage = () => {
                             <div className='relative h-auto w-auto mt-2'>
                                 <img src={stamp} alt="No Image found" className='absolute h-auto w-[9rem] ms-[-25px]' />
                             </div>
-                            <p className='mt-20'>Bhawna Maheshwari</p>
+                            <p className='mt-24'>Bhawna Maheshwari</p>
                             <p>{editableData.companyName}</p> {/* Reflect selected company */}
                             <p>Dhampur</p>
                         </div>
