@@ -4,12 +4,17 @@ import stamp from "../../src/assets/stamp_sign.png"
 
 const PreviewPage = ({ loggedInEmail }) => {
     const companyByEmail = {
-        "shreeji@example.com": "Shree Ji",
-        "northernimpex@example.com": "Northern Impex",
-        "swarajudyog@example.com": "Swaraj Udyog"
+        "shreeji@gmail.com": "Shree Ji",
+        "northernimpex@gmail.com": "Northern Impex",
+        "swarajudyog@gmail.com": "Swaraj Udyog"
     };
 
-    const defaultCompany = companyByEmail[loggedInEmail] || 'Swaraj Udyog';
+    const defaultCompany = companyByEmail[loggedInEmail]|| "Swaraj Udyog";
+
+    // console.log('Logged In Email:', loggedInEmail);
+    // console.log('Company By Email:', companyByEmail);
+    // console.log('Default Company:', companyByEmail[loggedInEmail]);
+
 
     const [editableData, setEditableData] = useState({
         date: '16.08.24',
