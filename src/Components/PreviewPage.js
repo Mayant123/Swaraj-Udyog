@@ -1,14 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import { Viewer, Worker } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
 import html2pdf from 'html2pdf.js';
-import stamp from "../../src/assets/stamp_sign.png"
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
+import { default as React, useEffect, useState } from 'react';
+import stamp from "../../src/assets/stamp_sign.png";
+import Uploadfile from "./Uploadfile";
 
 const PreviewPage = ({ loggedInEmail }) => {
+    const [pdfData, setPdfData] = useState(null);
+    const [pdfUrl, setPdfUrl] = useState(null);
     const companyByEmail = {
         "shreeji@gmail.com": "Shree Ji",
         "northernimpex@gmail.com": "Northern Impex",
         "swarajudyog@gmail.com": "Swaraj Udyog"
     };
+    const [signedPdfUrl, setSignedPdfUrl] = useState(null);
 
+    const handlePdfReady = (url) => {
+        setSignedPdfUrl(url);
+    };
     const defaultCompany = companyByEmail[loggedInEmail]|| "Swaraj Udyog";
 
     // console.log('Logged In Email:', loggedInEmail);
@@ -63,6 +73,7 @@ const PreviewPage = ({ loggedInEmail }) => {
             html2pdf().from(element).set(opt).save();
         }, 500);
     };
+    
 
     return (
         <>
@@ -253,7 +264,23 @@ const PreviewPage = ({ loggedInEmail }) => {
                             <p>Dhampur</p>
                         </div>
                     </div>
+                    {pdfUrl && (
+                        <div className='px-4' style={{width:"100%",
+                                        height: "100%",
+                                        overflow: "auto"
+                                    }}>
+                    
+                            <Worker workerUrl={pdfjsWorker}>
+                                <Viewer fileUrl={pdfUrl} defaultScale={1.0} />
+                            </Worker>
+                        </div>)}
                 </div>
+            </div>
+            <div style={{marginLeft:"40%"}}>
+                {isPreviewMode?<button className="inline-flex mb-4 ms-4 items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white"
+                    >
+                <Uploadfile pdfData={pdfData} setPdfData={setPdfData} pdfUrl={pdfUrl} setPdfUrl={setPdfUrl} />
+                </button>:""}
             </div>
             <div className='flex justify-center me-4 mt-4 mb-4 p-8'>
                 <button
@@ -263,13 +290,17 @@ const PreviewPage = ({ loggedInEmail }) => {
                     {isPreviewMode ? 'Edit' : 'Preview'}
                 </button>
                 {isPreviewMode && (
-                    <button
-                        onClick={downloadPDF}
-                        className="inline-flex mb-4 ms-4 items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white"
-                    >
-                        Download PDF
-                    </button>
+                    <div>
+                        <button
+                            onClick={downloadPDF}
+                            className="inline-flex mb-4 ms-4 items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white"
+                        >
+                            Download PDF
+                        </button>
+                    </div>
+                    
                 )}
+                
             </div>
         </>
     );
