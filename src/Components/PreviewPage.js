@@ -5,11 +5,12 @@ import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import { default as React, useEffect, useState } from 'react';
 import stamp from "../../src/assets/stamp_sign.png";
 import Uploadfile from "./Uploadfile";
+import letterPad from "../assets/sriji_LetterPad.png"
 
 const PreviewPage = () => {
     const user = JSON.parse(localStorage.getItem("user"));
-    const loggedInEmail= user.email;
-    
+    const loggedInEmail = user.email;
+
     const [pdfData, setPdfData] = useState(null);
     const [pdfUrl, setPdfUrl] = useState(null);
     const companyByEmail = {
@@ -22,7 +23,7 @@ const PreviewPage = () => {
     const handlePdfReady = (url) => {
         setSignedPdfUrl(url);
     };
-    const defaultCompany = companyByEmail[loggedInEmail]|| "Swaraj Udyog";
+    const defaultCompany = companyByEmail[loggedInEmail] || "Swaraj Udyog";
 
     // console.log('Logged In Email:', loggedInEmail);
     // console.log('Company By Email:', companyByEmail);
@@ -76,11 +77,24 @@ const PreviewPage = () => {
             html2pdf().from(element).set(opt).save();
         }, 500);
     };
-    
+
 
     return (
         <>
             <div className='container mx-auto mt-4 p-2 md:p-4' id="pdf-content">
+                <div
+                    className='absolute top-0 left-0 w-full h-full bg-cover bg-center'
+                    style={{
+                        backgroundImage: `url(${letterPad})`,
+                        backgroundSize: 'contain',
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: 'center',
+                        zIndex: -1,
+                        height: "57rem"
+                    }}
+                >
+                    {/* This container ensures that the background image covers the whole area */}
+                </div>
                 <div className="main rounded shadow-xl md:w-[100%] mx-auto">
                     <div className='md:mx-[10px]'>
                         <div className='flex justify-end'>
@@ -268,22 +282,27 @@ const PreviewPage = () => {
                         </div>
                     </div>
                     {pdfUrl && (
-                        <div className='px-4' style={{width:"100%",
-                                        height: "100%",
-                                        overflow: "auto"
-                                    }}>
-                    
+                        <div className='px-4' style={{
+                            width: "100%",
+                            height: "100%",
+                            overflow: "auto"
+                        }}>
+
                             <Worker workerUrl={pdfjsWorker}>
                                 <Viewer fileUrl={pdfUrl} defaultScale={1.0} />
                             </Worker>
                         </div>)}
                 </div>
             </div>
-            <div style={{marginLeft:"40%"}}>
-                {isPreviewMode?<button className="inline-flex mb-4 ms-4 items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white"
-                    >
-                <Uploadfile pdfData={pdfData} setPdfData={setPdfData} pdfUrl={pdfUrl} setPdfUrl={setPdfUrl} />
-                </button>:""}
+            <div className='flex justify-center'>
+                {isPreviewMode ?
+                    <div className='flex flex-col items-center gap-2'>
+                        <p className='font-bold'>Select Invoice :</p>
+                        <button className="inline-flex mb-4 ms-4 items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white"
+                        >
+                            <Uploadfile pdfData={pdfData} setPdfData={setPdfData} pdfUrl={pdfUrl} setPdfUrl={setPdfUrl} />
+                        </button>
+                    </div> : ""}
             </div>
             <div className='flex justify-center me-4 mt-4 mb-4 p-8'>
                 <button
@@ -301,9 +320,9 @@ const PreviewPage = () => {
                             Download PDF
                         </button>
                     </div>
-                    
+
                 )}
-                
+
             </div>
         </>
     );
