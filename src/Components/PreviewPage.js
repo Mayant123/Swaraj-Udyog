@@ -6,7 +6,10 @@ import { default as React, useEffect, useState } from 'react';
 import stamp from "../../src/assets/stamp_sign.png";
 import Uploadfile from "./Uploadfile";
 
-const PreviewPage = ({ loggedInEmail }) => {
+const PreviewPage = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const loggedInEmail= user.email;
+    
     const [pdfData, setPdfData] = useState(null);
     const [pdfUrl, setPdfUrl] = useState(null);
     const companyByEmail = {
