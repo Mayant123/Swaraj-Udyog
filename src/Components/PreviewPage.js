@@ -70,7 +70,7 @@ const PreviewPage = () => {
             margin: 0.5,
             filename: `Sno.${editableData.order.soNumber}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
+            html2canvas: { scale: 4 },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
         setTimeout(() => {
@@ -90,7 +90,7 @@ const PreviewPage = () => {
                         backgroundRepeat: "no-repeat",
                         backgroundPosition: 'center',
                         zIndex: -1,
-                        height: "57rem"
+                        height: "60rem"
                     }}
                 >
                     {/* This container ensures that the background image covers the whole area */}
