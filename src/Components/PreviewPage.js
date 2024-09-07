@@ -307,7 +307,7 @@ const PreviewPage = () => {
                         </button>
                     </div> : ""}
             </div>
-            <div className='flex justify-center me-4 mt-4 mb-4 p-8'>
+            <div className='relative flex justify-center me-4 mt-8 md:mt-4 mb-4 p-8 z-10'>
                 <button
                     onClick={togglePreviewMode}
                     className="inline-flex mb-4 items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white"
