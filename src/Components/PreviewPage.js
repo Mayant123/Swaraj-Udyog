@@ -100,17 +100,17 @@ const PreviewPage = () => {
                             {/* This container ensures that the background image covers the whole area */}
                         </div>
                         <div
-                            className=' fixed md:block md:absolute md:top-[28%] h-[31rem] left-0 w-full bg-white'>
+                            className=' fixed md:block md:absolute md:top-[22%] md:h-[40rem] left-0 w-full bg-white'>
                             <div className='md:mx-10  bg-white'>
                                 <div
-                                    className=' w-full h-full bg-cover bg-center bg-white'
+                                    className=' w-full h-full mt-20 bg-cover bg-center bg-white'
                                     style={{
                                         backgroundImage: `url(${letterPad2})`,
                                         backgroundSize: 'contain',
                                         backgroundRepeat: "no-repeat",
                                         backgroundPosition: 'center',
                                         zIndex: -1,
-                                        height: "28rem",
+                                        height: "30rem",
 
                                     }}
                                 >
