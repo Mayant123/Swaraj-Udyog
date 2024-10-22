@@ -3,9 +3,10 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import html2pdf from 'html2pdf.js';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import { default as React, useEffect, useState } from 'react';
-import stamp from "../../src/assets/stamp_sign.png";
+import stamp from "../../src/assets/stamp_sign1.png";
 import Uploadfile from "./Uploadfile";
 import letterPad from "../assets/sriji_LetterPad.png"
+import letterPad2 from "../assets/sriji_LetterPad3.png"
 
 const PreviewPage = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -82,23 +83,44 @@ const PreviewPage = () => {
     return (
         <>
             <div className='container mx-auto mt-4 p-2 md:p-4' id="pdf-content">
-                <div className="main rounded shadow-xl md:w-[100%] mx-auto">
-                    <div className='md:mx-[10px]'>
+                <div className="main rounded shadow-xl md:w-[100%] mx-auto " >
+                    <div className='md:mx-[10px] md:relative'>
                         <div
-                            className='absolute top-0 left-0 w-full h-full bg-cover bg-center'
+                            className='hidden md:block  absolute top-0 left-0 w-full h-full bg-cover bg-center '
                             style={{
                                 backgroundImage: `url(${letterPad})`,
                                 backgroundSize: 'contain',
                                 backgroundRepeat: "no-repeat",
                                 backgroundPosition: 'center',
-                                zIndex: -1,
+                                zIndex: -2,
                                 height: "61rem",
-                                
+
                             }}
                         >
                             {/* This container ensures that the background image covers the whole area */}
                         </div>
-                        <div className='relative h-[64rem] top-[-40px]  '>
+                        <div
+                            className=' fixed md:block md:absolute md:top-[28%] h-[31rem] left-0 w-full bg-white'>
+                            <div className='md:mx-10  bg-white'>
+                                <div
+                                    className=' w-full h-full bg-cover bg-center bg-white'
+                                    style={{
+                                        backgroundImage: `url(${letterPad2})`,
+                                        backgroundSize: 'contain',
+                                        backgroundRepeat: "no-repeat",
+                                        backgroundPosition: 'center',
+                                        zIndex: -1,
+                                        height: "28rem",
+
+                                    }}
+                                >
+                                    {/* This container ensures that the background image covers the whole area */}
+                                </div>
+                            </div>
+
+                            {/* This container ensures that the background image covers the whole area */}
+                        </div>
+                        <div className='relative h-[64rem] md:-top-[15px] '>
                             <div className='flex justify-end'>
                                 <div className='flex-col'>
                                     <p className='text-[1.75rem] font-bold'>{editableData.companyName}</p> {/* Display the company name dynamically */}
